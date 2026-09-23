@@ -1,1 +1,770 @@
-# constructions
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sri Lalitha Constructions | Guntakal</title>
+  
+  <style>
+    /* Reset and Base Variables */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --terracotta: #b85d19;
+      --terracotta-dark: #8f440e;
+      --amber: #d97706;
+      --gold: #f59e0b;
+      --slate-dark: #0f172a;
+      --slate-card: #1e293b;
+      --slate-border: #334155;
+      --cream: #faf7f2;
+      --cream-dark: #f0e7dc;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --emerald: #10b981;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--cream);
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* Top Strip */
+    .top-bar {
+      background: #090d16;
+      color: #94a3b8;
+      font-size: 12px;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .top-bar .rera { color: var(--emerald); font-weight: 600; }
+
+    /* Navigation */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--cream-dark);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .logo-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--terracotta), var(--amber));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 18px;
+    }
+      .consult-modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        background: linear-gradient(110deg, rgba(3, 8, 15, 0.92), rgba(8, 20, 31, 0.74)),
+          url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85') center/cover;
+        backdrop-filter: blur(6px);
+        z-index: 100;
+      }
+      .consult-modal.is-open { display: flex; }
+      .consult-dialog {
+        position: relative;
+        width: min(460px, 100%);
+        max-height: min(720px, calc(100vh - 24px));
+        overflow-y: auto;
+        background: linear-gradient(145deg, rgba(25, 39, 55, 0.97), rgba(10, 20, 32, 0.97));
+        border: 1px solid rgba(245, 158, 11, 0.42);
+        border-radius: 18px;
+        padding: 26px 30px;
+        text-align: center;
+        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.58), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      }
+      .consult-dialog::before {
+        content: '';
+        display: block;
+        width: 58px;
+        height: 4px;
+        margin: 0 auto 22px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--terracotta), var(--gold));
+      }
+      .consult-dialog h2 { color: white; font-size: 26px; letter-spacing: 0.2px; margin-bottom: 8px; text-shadow: 0 3px 15px rgba(0, 0, 0, 0.35); }
+      .consult-dialog > p { color: #cbd5e1; font-size: 14px; margin-bottom: 18px; }
+      .consult-form { display: grid; gap: 10px; text-align: left; }
+      .consult-form label { color: #f8fafc; font-size: 12px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; }
+      .consult-form input {
+        width: 100%;
+        margin-top: 5px;
+        padding: 11px 14px;
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(148, 163, 184, 0.34);
+        border-radius: 9px;
+        font: inherit;
+      }
+      .consult-form input::placeholder { color: #94a3b8; }
+      .consult-form input:focus { outline: 2px solid rgba(245, 158, 11, 0.32); border-color: var(--gold); background: rgba(255, 255, 255, 0.12); }
+      .consult-form input[type="date"] { color-scheme: dark; }
+      .location-field { display: grid; gap: 8px; }
+      .location-actions { display: block; }
+      .consult-form .btn-main { width: 100%; min-height: 50px; border: 0; cursor: pointer; margin-top: 8px; }
+      .consult-form .btn-secondary { width: 100%; min-height: 44px; border: 1px solid rgba(148, 163, 184, 0.3); cursor: pointer; background: rgba(255, 255, 255, 0.08); }
+      .consult-form .btn-secondary:hover { background: rgba(255, 255, 255, 0.16); }
+      .booking-status { color: #fbbf24; font-size: 13px; font-weight: 600; }
+    body.booking-mode > *:not(#consultModal) { display: none; }
+    body.booking-mode .consult-modal { background: linear-gradient(110deg, rgba(3, 8, 15, 0.92), rgba(8, 20, 31, 0.74)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85') center/cover; }
+    body.home-mode > .top-bar,
+    body.home-mode > section:not(.hero),
+    body.home-mode > .wa-btn { display: none; }
+    body.section-mode > section:not(.active-section) { display: none; }
+    body.section-mode > .wa-btn { display: none; }
+    body.contact-mode > .wa-btn { display: flex; }
+    body.section-mode .active-section { display: block !important; }
+    @keyframes cinematicFadeZoom {
+      from { opacity: 0; transform: scale(0.94) translateY(24px); filter: blur(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    }
+    @keyframes cinematicSlide {
+      from { opacity: 0; transform: translateX(72px) scale(0.98); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes cinematicRise {
+      from { opacity: 0; transform: translateY(72px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .cinematic-fade-zoom { animation: cinematicFadeZoom 650ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+    .cinematic-slide { animation: cinematicSlide 600ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+    .cinematic-rise { animation: cinematicRise 600ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+    .consult-modal.is-open { animation: cinematicFadeZoom 500ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+    .consult-modal.is-open .consult-dialog { animation: cinematicRise 650ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    }
+    .brand-title { font-size: 18px; font-weight: 800; color: var(--slate-dark); letter-spacing: -0.5px; }
+    .brand-sub { font-size: 10px; color: var(--terracotta); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+
+    .nav-links { display: flex; gap: 10px; font-size: 12px; font-weight: 800; }
+    .nav-links a { display: inline-flex; align-items: center; min-height: 38px; padding: 8px 13px; border: 1px solid var(--cream-dark); border-radius: 8px; color: var(--slate-dark); background: white; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 3px 8px rgba(15, 23, 42, 0.06); transition: color 0.2s, background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+    .nav-links a:hover { color: white; background: var(--terracotta); border-color: var(--terracotta); transform: translateY(-2px); box-shadow: 0 7px 14px rgba(184, 93, 25, 0.22); }
+    .btn-quote {
+      background: var(--terracotta);
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .btn-quote:hover { background: var(--terracotta-dark); }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      isolation: isolate;
+      min-height: 590px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(5, 10, 18, 0.9) 0%, rgba(10, 20, 34, 0.48) 48%, rgba(10, 15, 24, 0.72) 100%),
+        linear-gradient(180deg, rgba(6, 12, 22, 0.08) 45%, rgba(6, 10, 16, 0.92) 100%),
+        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=90') center/cover;
+      color: white;
+      padding: 96px 24px 112px;
+      text-align: center;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(circle at 50% 42%, transparent 0 24%, rgba(2, 6, 12, 0.42) 100%);
+      pointer-events: none;
+    }
+    .hero-container { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+    .badge {
+      display: inline-block;
+      background: rgba(184, 93, 25, 0.25);
+      border: 1px solid var(--terracotta);
+      color: var(--gold);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+    }
+    .hero h1 { font-size: 40px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; text-shadow: 0 4px 22px rgba(0, 0, 0, 0.42); }
+    .hero h1 span { color: var(--gold); }
+    .hero p { color: #cbd5e1; font-size: 16px; max-width: 650px; margin: 0 auto 30px; }
+    .hero-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .hero-actions button { border: 0; cursor: pointer; }
+    .btn-main, .btn-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 13px 24px; border: 0; border-radius: 9px; color: white; font-weight: 800; font-size: 13px; letter-spacing: 0.3px; cursor: pointer; box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18); transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
+    .btn-main { background: linear-gradient(135deg, var(--terracotta), var(--amber)); }
+    .btn-secondary { background: #334155; }
+    .btn-main:hover, .btn-secondary:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25); }
+    .btn-main:focus-visible, .btn-secondary:focus-visible { outline: 3px solid rgba(245, 158, 11, 0.5); outline-offset: 3px; }
+
+    /* Section Global */
+    .section-pad {
+      position: relative;
+      isolation: isolate;
+      min-height: calc(100vh - 78px);
+      padding: 86px 24px 104px;
+      max-width: none;
+      overflow: hidden;
+      background-position: center;
+      background-size: cover;
+    }
+    .section-pad::before,
+    .estimator-section::before,
+    .contact-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .section-pad > *,
+    .estimator-section > *,
+    .contact-section > * { position: relative; z-index: 1; }
+    #services {
+      background-image: linear-gradient(100deg, rgba(7, 16, 28, 0.94), rgba(12, 25, 38, 0.72)),
+        url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=2000&q=85');
+    }
+    #services::before {
+      background: radial-gradient(circle at 78% 22%, rgba(217, 119, 6, 0.34), transparent 34%),
+        linear-gradient(180deg, rgba(3, 8, 15, 0.05), rgba(3, 8, 15, 0.62));
+    }
+    #vaastu {
+      background-image: linear-gradient(100deg, rgba(12, 24, 32, 0.9), rgba(18, 34, 39, 0.68)),
+        url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2000&q=85');
+    }
+    #vaastu::before {
+      background: radial-gradient(circle at 24% 28%, rgba(245, 158, 11, 0.3), transparent 30%),
+        linear-gradient(180deg, rgba(3, 8, 15, 0.08), rgba(3, 8, 15, 0.58));
+    }
+    .section-pad > .heading-box,
+    .section-pad > .services-grid,
+    .section-pad > .grid-4 { max-width: 1200px; margin-left: auto; margin-right: auto; }
+    .heading-box { text-align: center; margin-bottom: 48px; }
+    .heading-box .tag { color: var(--terracotta); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
+    .heading-box h2 { font-size: 32px; font-weight: 800; margin-top: 6px; color: var(--slate-dark); }
+    .heading-box p { color: var(--text-muted); font-size: 14px; margin-top: 6px; }
+    .section-pad .heading-box h2 { color: white; text-shadow: 0 4px 18px rgba(0, 0, 0, 0.42); }
+    .section-pad .heading-box p { color: #d6e0e7; }
+    .section-pad .heading-box .tag { color: var(--gold); }
+
+    /* Services */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .service-card { background: rgba(255, 255, 255, 0.94); padding: 24px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.72); box-shadow: 0 16px 34px rgba(2, 6, 12, 0.2); backdrop-filter: blur(7px); }
+    .service-icon { width: 42px; height: 42px; display: grid; place-items: center; background: var(--cream-dark); border-radius: 10px; color: var(--terracotta); font-size: 20px; margin-bottom: 16px; }
+    .service-card h3 { font-size: 17px; color: var(--slate-dark); margin-bottom: 8px; }
+    .service-card p { color: var(--text-muted); font-size: 13px; }
+
+    /* Contact */
+    .contact-section { position: relative; isolation: isolate; background: var(--slate-dark); color: white; max-width: none; overflow: hidden; }
+    .contact-section::before { background: linear-gradient(105deg, rgba(4, 10, 18, 0.95), rgba(10, 23, 34, 0.64)), url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=2000&q=85') center/cover; }
+    .contact-section .heading-box h2 { color: white; }
+    .contact-section .heading-box p { color: #cbd5e1; }
+    .contact-details { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .contact-item { background: var(--slate-card); border: 1px solid var(--slate-border); border-radius: 12px; padding: 20px; text-align: center; }
+    .contact-item strong { display: block; color: var(--gold); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .contact-item a { color: white; font-size: 15px; font-weight: 700; word-break: break-word; }
+    .contact-item a:hover { color: var(--gold); }
+
+    /* Cost Estimator (Slate Dark background) */
+    .estimator-section { position: relative; isolation: isolate; background: var(--slate-dark); color: white; padding: 86px 24px 104px; overflow: hidden; }
+    .estimator-section::before { background: linear-gradient(105deg, rgba(5, 11, 20, 0.96), rgba(12, 26, 39, 0.74)), url('https://images.unsplash.com/photo-1503387762-592a09cf159d?auto=format&fit=crop&w=2000&q=85') center/cover; }
+    .calc-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 32px; }
+    .calc-inputs { background: var(--slate-card); padding: 32px; border-radius: 16px; border: 1px solid var(--slate-border); }
+    .calc-result { background: #131d31; padding: 32px; border-radius: 16px; border: 1px solid var(--terracotta); display: flex; flex-direction: column; justify-content: space-between; }
+    
+    .input-group { margin-bottom: 24px; }
+    .input-label-row { display: flex; justify-content: space-between; font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+    .highlight-val { color: var(--gold); font-weight: 800; font-size: 18px; }
+    input[type=range] { width: 100%; accent-color: var(--terracotta); }
+
+    .pkg-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .pkg-card {
+      border: 2px solid var(--slate-border);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s;
+    }
+    .pkg-card.active { border-color: var(--terracotta); background: rgba(184, 93, 25, 0.15); }
+    .pkg-name { font-size: 12px; font-weight: 700; color: #94a3b8; }
+    .pkg-price { font-size: 16px; font-weight: 800; color: white; margin-top: 4px; }
+
+    .total-box { text-align: center; padding: 24px 0; }
+    .total-title { font-size: 13px; color: #94a3b8; }
+    .total-amount { font-size: 42px; font-weight: 800; color: var(--gold); margin: 6px 0; }
+
+    .breakdown-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--slate-border); font-size: 13px; color: #cbd5e1; }
+
+    /* Vaastu Shastra Cards */
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .vaastu-card { background: rgba(255, 255, 255, 0.94); padding: 24px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.72); box-shadow: 0 16px 34px rgba(2, 6, 12, 0.2); backdrop-filter: blur(7px); }
+    .vaastu-badge { font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 12px; }
+    .badge-ishanya { background: #dcfce7; color: #166534; }
+    .badge-agneya { background: #fef3c7; color: #92400e; }
+    .badge-nairuthi { background: #ffedd5; color: #9a3412; }
+    .badge-vayuvya { background: #e0f2fe; color: #075985; }
+
+    /* Floating WhatsApp */
+    .wa-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #25d366;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+      z-index: 99;
+    }
+
+    /* Responsive */
+    @media (max-width: 850px) {
+      .calc-container { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero h1 { font-size: 30px; }
+      .pkg-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="home-mode">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div>
+      <span class="rera">✔ AP-RERA Reg: P0329001479</span> | 
+      <span>APCRDA &amp; VMRDA Approved Civil Contractor</span>
+    </div>
+    <div>
+      <span>Guntakal</span> |
+      <strong>+91 91004 84750</strong>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="#home" class="logo-brand" onclick="showHome(event)">
+      <div class="logo-icon">SL</div>
+      <div>
+        <div class="brand-title">SRI LALITHA</div>
+        <div class="brand-sub">Constructions &amp; Infra Guntakal</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#home" onclick="showHome(event)">Home</a>
+      <a href="#services" onclick="showSection(event, 'services')">Services</a>
+      <a href="#estimator" onclick="showSection(event, 'estimator')">Cost Calculator</a>
+      <a href="#vaastu" onclick="showSection(event, 'vaastu')">100% Vaastu</a>
+      <a href="#contact" onclick="showSection(event, 'contact')">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero" class="hero">
+    <div class="hero-container">
+      <div class="badge">Turnkey Civil Construction • Andhra Pradesh</div>
+      <h1>Building Generational Homes With <span>100% Vaastu Compliance</span></h1>
+      <p>Luxury duplex villas, multi-family apartments, and commercial projects delivered on time across Guntakal and nearby local areas.</p>
+      <div class="hero-actions">
+        <button type="button" class="btn-main" onclick="bookConsult()">Start Your Home Journey</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section-pad">
+    <div class="heading-box">
+      <div class="tag">Complete Construction Solutions</div>
+      <h2>Our Services</h2>
+      <p>From the first plan to final handover, our team manages every stage of your project.</p>
+    </div>
+
+    <div class="services-grid">
+      <article class="service-card">
+        <div class="service-icon">⌂</div>
+        <h3>Residential Construction</h3>
+        <p>Turnkey homes, duplex villas, and family residences built around your needs and budget.</p>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">▦</div>
+        <h3>Commercial Projects</h3>
+        <p>Reliable civil construction for offices, shops, apartments, and other commercial spaces.</p>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">✦</div>
+        <h3>Vaastu Planning</h3>
+        <p>Practical layouts designed with 100% Vaastu guidance, natural light, and ventilation in mind.</p>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">✓</div>
+        <h3>Renovation &amp; Interiors</h3>
+        <p>Thoughtful upgrades, finishes, and interior improvements that refresh and strengthen your space.</p>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">⚙</div>
+        <h3>Plumbing</h3>
+        <p>Complete water supply, drainage, bathroom, and plumbing installations for dependable daily use.</p>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">⚡</div>
+        <h3>Electrical Work</h3>
+        <p>Safe electrical wiring, lighting, power points, and home systems installed by experienced technicians.</p>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">◈</div>
+        <h3>Painting</h3>
+        <p>Interior and exterior painting with careful surface preparation and durable, clean finishes.</p>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">▤</div>
+        <h3>Woodwork</h3>
+        <p>Custom doors, wardrobes, cabinets, and other woodwork designed to suit your home.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Cost Estimator -->
+  <section id="estimator" class="estimator-section">
+    <div class="heading-box">
+      <div class="tag" style="color: var(--gold);">Transparent Pricing</div>
+      <h2 style="color: white;">AP Turnkey Cost Calculator</h2>
+      <p style="color: #94a3b8;">Real-time construction cost calculation based on prevailing Andhra Pradesh material rates.</p>
+    </div>
+
+    <div class="calc-container">
+      <div class="calc-inputs">
+        <div class="input-group">
+          <div class="input-label-row">
+            <span>Built-Up Area (Sq.Ft)</span>
+            <span id="sftDisplay" class="highlight-val">1,800 Sft</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label-row">
+            <span>Choose Finish Package</span>
+          </div>
+          <div class="pkg-grid">
+            <div class="pkg-card" onclick="selectPkg(1850, 'Standard', this)">
+              <div class="pkg-name">Standard</div>
+              <div class="pkg-price">₹1,850/sft</div>
+            </div>
+            <div class="pkg-card active" onclick="selectPkg(2150, 'Premium', this)">
+              <div class="pkg-name">Premium (Teak)</div>
+              <div class="pkg-price">₹2,150/sft</div>
+            </div>
+            <div class="pkg-card" onclick="selectPkg(2550, 'Luxury', this)">
+              <div class="pkg-name">Royal Luxury</div>
+              <div class="pkg-price">₹2,550/sft</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group" style="border-top: 1px solid var(--slate-border); padding-top: 18px;">
+          <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer;">
+            <input type="checkbox" id="sumpAddon" onchange="calculate()">
+            <span>Include 8,000L RCC Underground Sump (+₹1,20,000)</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="calc-result">
+        <div class="total-box">
+          <div class="total-title">Total Project Estimate (Turnkey)</div>
+          <div id="totalCost" class="total-amount">₹ 38.70 Lakhs</div>
+          <div id="pkgLabel" style="font-size: 12px; color: #94a3b8;">Premium Specification (₹2,150 / sft)</div>
+        </div>
+
+        <div>
+          <div class="breakdown-row"><span>Structural RCC &amp; Steel</span><strong id="b-struct">₹ 17.41 L</strong></div>
+          <div class="breakdown-row"><span>Brickwork &amp; Plastering</span><strong id="b-brick">₹ 6.96 L</strong></div>
+          <div class="breakdown-row"><span>Teak Doors &amp; Flooring</span><strong id="b-finish">₹ 8.51 L</strong></div>
+          <div class="breakdown-row"><span>Electrical &amp; Plumbing</span><strong id="b-mep">₹ 5.80 L</strong></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 100% Vaastu Section -->
+  <section id="vaastu" class="section-pad">
+    <div class="heading-box">
+      <div class="tag">Ancient Science • Modern Engineering</div>
+      <h2>100% Vaastu Shastra Standards</h2>
+      <p>Harmonizing cardinal directions for prosperity, longevity, and natural ventilation.</p>
+    </div>
+
+    <div class="grid-4">
+      <div class="vaastu-card">
+        <span class="vaastu-badge badge-ishanya">North-East (Ishanya)</span>
+        <h3 style="font-size: 16px; margin-bottom: 8px;">Pooja Mandir &amp; Water</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">Allocated exclusively for family pooja space, borewells, and open lawns to maintain uninterrupted positive flow.</p>
+      </div>
+
+      <div class="vaastu-card">
+        <span class="vaastu-badge badge-agneya">South-East (Agneya)</span>
+        <h3 style="font-size: 16px; margin-bottom: 8px;">Kitchen &amp; Inverter Hub</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">The element of Fire (*Agni*). Designed for East-facing cooking slabs and heavy electrical transformer setup.</p>
+      </div>
+
+      <div class="vaastu-card">
+        <span class="vaastu-badge badge-nairuthi">South-West (Nairuthi)</span>
+        <h3 style="font-size: 16px; margin-bottom: 8px;">Master Bedroom</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">The point of maximum structural stability. Reserved for master suites and overhead heavy RCC tanks.</p>
+      </div>
+
+      <div class="vaastu-card">
+        <span class="vaastu-badge badge-vayuvya">North-West (Vayuvya)</span>
+        <h3 style="font-size: 16px; margin-bottom: 8px;">Guest &amp; Children Bed</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">Air element sector ensuring healthy circulation, guest rooms, and external garage arrangements.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section-pad contact-section">
+    <div class="heading-box">
+      <div class="tag" style="color: var(--gold);">Get In Touch</div>
+      <h2>Contact Us</h2>
+      <p>Speak with our team about your construction project in Guntakal.</p>
+    </div>
+    <div class="contact-details">
+      <div class="contact-item">
+        <strong>Phone</strong>
+        <a href="tel:+919100484750">9100484750</a>
+      </div>
+      <div class="contact-item">
+        <strong>Phone</strong>
+        <a href="tel:+919398392971">9398392971</a>
+      </div>
+      <div class="contact-item">
+        <strong>Email</strong>
+        <a href="mailto:rajeshh7104@gmail.com">rajeshh7104@gmail.com</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/919100484750?text=Hello%20Sri%20Lalitha%20Constructions,%20I%20want%20a%20construction%20quote." target="_blank" class="wa-btn">
+    💬 WhatsApp
+  </a>
+
+  <div id="consultModal" class="consult-modal" role="dialog" aria-modal="true" aria-labelledby="consultTitle">
+    <div class="consult-dialog">
+      <h2 id="consultTitle">Book Site Inspection</h2>
+      <p>Enter your details to request a site inspection from Sri Lalitha Constructions.</p>
+      <form class="consult-form" onsubmit="submitConsult(event)">
+        <label>
+          Your Name
+          <input id="customerName" type="text" placeholder="Enter your name" required>
+        </label>
+        <label>
+          Phone Number
+          <input id="customerPhone" type="tel" placeholder="Enter your phone number" required>
+        </label>
+        <label class="location-field">
+          Site Location
+          <div class="location-actions">
+            <input id="siteLocation" type="text" placeholder="Enter address or landmark">
+          </div>
+        </label>
+        <label>
+          Preferred Date
+          <input id="inspectionDate" type="date" required>
+        </label>
+        <button class="btn-main" type="submit">Send Booking Request</button>
+        <button class="btn-secondary" type="button" onclick="closeConsult()">Cancel</button>
+        <p id="bookingStatus" class="booking-status" role="status"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script (Vanilla JS, Zero errors) -->
+  <script>
+    let currentRate = 2150;
+    let currentPkg = "Premium";
+    let lastCinematicStyle = -1;
+
+    const sftSlider = document.getElementById('sftSlider');
+    const sftDisplay = document.getElementById('sftDisplay');
+    const totalCost = document.getElementById('totalCost');
+    const pkgLabel = document.getElementById('pkgLabel');
+    const sumpAddon = document.getElementById('sumpAddon');
+
+    const SUPABASE_URL = 'https://egfoqvnmxdjtvozcobkv.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_-B_vAakukoOyTTEptN303g_wj_yIeto';
+
+    function selectPkg(rate, name, el) {
+      currentRate = rate;
+      currentPkg = name;
+      document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      calculate();
+      animateCinematic(document.querySelector('.calc-result'));
+    }
+
+    function calculate() {
+      const sft = sftSlider ? parseInt(sftSlider.value) : 1800;
+      sftDisplay.innerText = sft.toLocaleString('en-IN') + ' Sft';
+
+      let total = sft * currentRate;
+      if (sumpAddon.checked) total += 120000;
+
+      const lakhs = (total / 100000).toFixed(2);
+      totalCost.innerText = '₹ ' + lakhs + ' Lakhs';
+      pkgLabel.innerText = currentPkg + ' Specification (₹' + currentRate + ' / sft)';
+
+      document.getElementById('b-struct').innerText = '₹ ' + (total * 0.45 / 100000).toFixed(2) + ' L';
+      document.getElementById('b-brick').innerText = '₹ ' + (total * 0.18 / 100000).toFixed(2) + ' L';
+      document.getElementById('b-finish').innerText = '₹ ' + (total * 0.22 / 100000).toFixed(2) + ' L';
+      document.getElementById('b-mep').innerText = '₹ ' + (total * 0.15 / 100000).toFixed(2) + ' L';
+    }
+
+    function bookConsult() {
+      document.body.classList.add('booking-mode');
+      const modal = document.getElementById('consultModal');
+      modal.classList.add('is-open');
+      animateCinematic(modal);
+    }
+
+    function showSection(event, sectionId) {
+      event.preventDefault();
+      document.body.classList.remove('home-mode', 'services-mode', 'contact-mode');
+      document.body.classList.add('section-mode');
+      document.querySelectorAll('body > section').forEach((section) => section.classList.remove('active-section'));
+      const section = document.getElementById(sectionId);
+      section.classList.add('active-section');
+      if (sectionId === 'contact') document.body.classList.add('contact-mode');
+      animateCinematic(section);
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function animateCinematic(element) {
+      const styles = ['cinematic-fade-zoom', 'cinematic-slide', 'cinematic-rise'];
+      const availableStyles = styles.map((style, index) => ({ style, index })).filter(({ index }) => index !== lastCinematicStyle);
+      const selectedStyle = availableStyles[Math.floor(Math.random() * availableStyles.length)];
+      lastCinematicStyle = selectedStyle.index;
+      element.classList.remove(...styles);
+      void element.offsetWidth;
+      element.classList.add(selectedStyle.style);
+    }
+
+    function showHome(event) {
+      event.preventDefault();
+      document.body.classList.remove('section-mode', 'services-mode', 'contact-mode');
+      document.body.classList.add('home-mode');
+      document.querySelectorAll('body > section').forEach((section) => section.classList.remove('active-section'));
+      const hero = document.getElementById('hero');
+      animateCinematic(hero);
+      hero.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function submitConsult(event) {
+      event.preventDefault();
+
+      const customerName = document.getElementById('customerName').value.trim();
+      const customerPhone = document.getElementById('customerPhone').value.trim();
+      const siteLocation = document.getElementById('siteLocation').value.trim();
+      const inspectionDate = document.getElementById('inspectionDate').value;
+      const submitButton = event.target.querySelector('button[type="submit"]');
+      const bookingStatus = document.getElementById('bookingStatus');
+      const supabaseConfigured = SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_PUBLISHABLE_KEY';
+      submitButton.disabled = true;
+      submitButton.textContent = supabaseConfigured ? 'Saving Request...' : 'Preparing Email...';
+      bookingStatus.textContent = '';
+
+      if (!supabaseConfigured) {
+        bookingStatus.textContent = 'Supabase is not configured. Add the Project URL and publishable key in the HTML file.';
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Booking Request';
+        return;
+      }
+
+      let response;
+      try {
+        response = await fetch(SUPABASE_URL + '/rest/v1/site_inspections', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            customer_name: customerName,
+            customer_phone: customerPhone,
+            site_location: siteLocation,
+            preferred_date: inspectionDate
+          })
+        });
+      } catch (error) {
+        bookingStatus.textContent = 'Connection failed. Please try again.';
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Booking Request';
+        return;
+      }
+
+      if (!response.ok) {
+        let errorMessage = 'We could not save your booking. Please try again.';
+        try {
+          const errorBody = await response.json();
+          if (errorBody.message) errorMessage += ' ' + errorBody.message;
+          else if (errorBody.hint) errorMessage += ' ' + errorBody.hint;
+        } catch (error) {}
+        bookingStatus.textContent = errorMessage;
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Booking Request';
+        return;
+      }
+
+      bookingStatus.textContent = 'Booking request saved successfully.';
+      event.target.reset();
+      submitButton.disabled = false;
+      submitButton.textContent = 'Send Booking Request';
+      setTimeout(closeConsult, 1200);
+    }
+
+    function closeConsult() {
+      document.getElementById('consultModal').classList.remove('is-open');
+      document.body.classList.remove('booking-mode');
+    }
+
+    if (sftSlider) {
+      sftSlider.addEventListener('input', calculate);
+      calculate();
+    }
+  </script>
+</body>
+</html>
